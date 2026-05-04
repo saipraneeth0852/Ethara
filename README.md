@@ -7,6 +7,11 @@ This repository includes dedicated documentation for each app layer:
 - `frontend/README.md` — frontend setup and usage
 - `backend/README.md` — backend setup, API, and production deployment
 
+## Admin Credentials
+
+- Email: `admin@taskflow.com`
+- Password: `Admin1234`
+
 ## Architecture
 
 - Frontend: React + TypeScript + Vite + Tailwind + shadcn/ui
