@@ -180,3 +180,4 @@ The backend seeds a demo admin and member user automatically.
 - [x] Docker-ready backend image
 - [x] Full project README
 # Ethara
+# Ethara
