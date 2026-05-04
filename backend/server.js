@@ -1,5 +1,4 @@
 require("dotenv").config();
-const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -19,15 +18,12 @@ const IS_PRODUCTION = NODE_ENV === "production";
 const PORT = parseInt(process.env.PORT, 10) || 4000;
 const TRUST_PROXY = process.env.TRUST_PROXY === "true";
 const FRONTEND_URLS = (process.env.FRONTEND_URL || "http://localhost:5173").split(",").map((url) => url.trim());
-const DATABASE_URL = process.env.DATABASE_URL || path.resolve(__dirname, "data", "taskflow.db");
+const DATABASE_URL = process.env.DATABASE_URL;
 
 const app = express();
 if (TRUST_PROXY) {
   app.set("trust proxy", 1);
 }
-
-const db = initializeDatabase(DATABASE_URL);
-seedDatabase(db);
 
 app.use(helmet());
 app.use(compression());
@@ -66,6 +62,10 @@ app.get("/healthz", (req, res) => {
 });
 
 (async () => {
+  if (!DATABASE_URL) {
+    throw new Error("DATABASE_URL is required");
+  }
+
   const db = await initializeDatabase(DATABASE_URL);
   await seedDatabase(db);
 
@@ -89,4 +89,7 @@ app.get("/healthz", (req, res) => {
   app.listen(PORT, () => {
     console.log(`TaskFlow backend running in ${NODE_ENV} mode on http://localhost:${PORT}`);
   });
-})();
+})().catch((err) => {
+  console.error("Failed to start backend:", err);
+  process.exit(1);
+});
