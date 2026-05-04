@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, LayoutDashboard, FolderKanban, Sparkles } from "lucide-react";
+import { LogOut, LayoutDashboard, FolderKanban, Orbit } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
@@ -25,9 +25,9 @@ export const Navbar = () => {
       <div className="container flex h-16 items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary shadow-glow">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <Orbit className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold tracking-tight">TaskFlow</span>
+          <span className="text-lg font-bold tracking-tight">Ethara</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
