@@ -81,8 +81,8 @@ module.exports = (pool) => {
            VALUES ($1, $2, $3, $4, $5, $6)`,
           [user.id, user.name, user.email, user.password_hash, user.role, user.created_at]
         );
-        sendToken(res, user);
-        return res.status(201).json({ user: sanitizeUser(user) });
+        const token = sendToken(res, user);
+        return res.status(201).json({ user: sanitizeUser(user), token });
       } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });
@@ -105,8 +105,8 @@ module.exports = (pool) => {
         if (!user || !bcrypt.compareSync(password, user.password_hash)) {
           return res.status(401).json({ message: "Invalid email or password" });
         }
-        sendToken(res, user);
-        return res.json({ user: sanitizeUser(user) });
+        const token = sendToken(res, user);
+        return res.json({ user: sanitizeUser(user), token });
       } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });

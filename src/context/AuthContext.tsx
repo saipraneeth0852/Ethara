@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { api } from "@/lib/api";
+import { api, clearStoredAuthToken, setStoredAuthToken } from "@/lib/api";
 import type { User } from "@/types";
 
 interface AuthContextValue {
@@ -32,17 +32,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const { data } = await api.post<{ user: User }>("/auth/login", { email, password });
+    const { data } = await api.post<{ user: User; token: string }>("/auth/login", { email, password });
+    setStoredAuthToken(data.token);
     setUser(data.user);
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    const { data } = await api.post<{ user: User }>("/auth/signup", { name, email, password });
+    const { data } = await api.post<{ user: User; token: string }>("/auth/signup", { name, email, password });
+    setStoredAuthToken(data.token);
     setUser(data.user);
   };
 
   const logout = async () => {
     await api.post("/auth/logout");
+    clearStoredAuthToken();
     setUser(null);
   };
 
@@ -51,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await api.get<{ user: User }>("/auth/me");
       setUser(data.user);
     } catch {
+      clearStoredAuthToken();
       setUser(null);
     }
   };
